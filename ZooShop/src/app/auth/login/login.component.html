@@ -1,1 +1,31 @@
-<p>login works!</p>
+<section>
+    <form 
+        [formGroup]="loginForm"
+        fxLayout="column" 
+        fxLayoutAlign="center center">
+        <div>Login:</div>
+        <mat-form-field>
+            <input 
+                type="email"
+                class="form-control" 
+                matInput
+                placeholder="email" 
+                formControlName="email">
+                <mat-hint>Enter valid email</mat-hint>
+                <mat-error *ngIf="hasRequiredError('email')">Missing Email</mat-error>
+                <mat-error *ngIf="hasEmailError()">Invalid Email</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input 
+                type="password"
+                class="form-control"
+                matInput
+                placeholder="password"
+                formControlName="password">
+                <mat-error *ngIf="hasRequiredError('password')">password Email</mat-error>
+        </mat-form-field>
+        <button [disabled]="loginForm.invalid" mat-raised-button color="primary"> Submit</button>
+    </form>
+</section>
+
+<div>test {{loginForm.errors?.required}} test </div>
