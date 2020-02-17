@@ -28,4 +28,8 @@ export class LoginComponent implements OnInit {
   hasEmailError() {
     return this.loginForm.get('email')?.getError('email');
   }
+
+  onSubmit() {
+    console.log(this.loginForm);
+  }
 }

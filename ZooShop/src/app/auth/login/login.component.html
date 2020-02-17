@@ -2,7 +2,8 @@
     <form 
         [formGroup]="loginForm"
         fxLayout="column" 
-        fxLayoutAlign="center center">
+        fxLayoutAlign="center center"
+        (ngSubmit)="onSubmit()">
         <div>Login:</div>
         <mat-form-field>
             <input 
@@ -24,8 +25,6 @@
                 formControlName="password">
                 <mat-error *ngIf="hasRequiredError('password')">password Email</mat-error>
         </mat-form-field>
-        <button [disabled]="loginForm.invalid" mat-raised-button color="primary"> Submit</button>
+        <button type="submit" [disabled]="loginForm.invalid" mat-raised-button color="primary"> Submit</button>
     </form>
 </section>
-
-<div>test {{loginForm.errors?.required}} test </div>
