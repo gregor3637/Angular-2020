@@ -5,6 +5,7 @@ import { PetsComponent } from './pets/pets.component';
 import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from '../shared/shared.module';
 import { DeletePetComponent } from './delete-pet/delete-pet.component';
+import { CreatePetProfileComponent } from './create-pet-profile/create-pet-profile.component';
 
 
 
@@ -13,6 +14,7 @@ import { DeletePetComponent } from './delete-pet/delete-pet.component';
     PetComponent,
     PetsComponent,
     DeletePetComponent,
+    CreatePetProfileComponent,
   ],
   imports: [
     SharedModule,

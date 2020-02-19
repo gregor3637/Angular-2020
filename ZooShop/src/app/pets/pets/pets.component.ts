@@ -1,60 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Pet } from '../pet.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DeletePetComponent } from '../delete-pet/delete-pet.component';
+import { Router } from '@angular/router';
+import { PetsService } from '../pets.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-pets',
   templateUrl: './pets.component.html',
   styleUrls: ['./pets.component.scss']
 })
-export class PetsComponent implements OnInit {
+export class PetsComponent implements OnInit, OnDestroy {
   isValid = true;
+  private petsSubscription: Subscription;
 
   data: string[] = ['asd', 'fsd', 'tsas']
-  pets: Pet[] = [
-    {
-      id: '3123',
-      name: 'kudjo',
-      type: 'dog',
-      lastVaccinationDate: new Date(2018, 11, 24),
-      passportId: '12333',
-      description: 'happydog'
-    },
-    {
-      id: '333',
-      name: 'garfield',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    }
-  ];
-
+  pets: Pet[] = [];
   constructor(
     private dialog: MatDialog,
+    private router: Router,
+    private petsService: PetsService,
   ) { }
 
   onEditHandler(selectedPetData) {
@@ -78,6 +44,12 @@ export class PetsComponent implements OnInit {
     });
   }
 
+  onAddNewPetHandler() {
+    console.log('onAddNewPetHandler');
+
+    this.router.navigate(['/pets/create']);
+  }
+
   findAndDeletePet(selectedPetData) {
     let found = this.pets.find(x => x.id === selectedPetData.id);
     if (found) {
@@ -89,6 +61,15 @@ export class PetsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.petsSubscription = this.petsService.ownedPets$.subscribe((pets) => {
+      this.pets = pets;
+    });
+    this.petsService.fetchUserPets();
   }
 
+  ngOnDestroy() {
+    if (this.petsSubscription) {
+      this.petsSubscription.unsubscribe();
+    }
+  }
 }
