@@ -4,11 +4,11 @@
             fxLayoutAlign="flex-start" 
             #f="ngForm" 
             fxLayoutGap="10px"
-            (ngSubmit)="onRegisterPet(f)">
+            (ngSubmit)="onCreatePetProfile(f)">
             <mat-form-field>
                 <mat-select placeholder="Choose Pet Type"
                     ngModel 
-                    name="petType" 
+                    name="type" 
                     required>
                     <mat-option *ngFor="let type of petTypes" [value]="type">
                         {{type}}
@@ -21,7 +21,7 @@
                         matInput 
                         placeholder="Pet`s name"
                         ngModel 
-                        name="petName"
+                        name="name"
                         required
                         #petName="ngModel">
                 </mat-form-field>
@@ -31,18 +31,18 @@
                         mathInput
                         placeholder="passport ID"
                         ngModel
-                        name="passportID"
+                        name="passportId"
                         minlength="6"
                         maxlength="6"
-                        #passportID="ngModel">
-                        <mat-hint align="end">{{passportID.value?.length}} / 6</mat-hint>
+                        #passportId="ngModel">
+                        <mat-hint align="end">{{passportId.value?.length}} / 6</mat-hint>
                         <mat-error>Has to be 6 chars</mat-error>
                 </mat-form-field>
                 <mat-form-field>    
                     <input 
                         matInput
                         ngModel
-                        name="date"
+                        name="lastVaccinationDate"
                         placeholder="Last vaccinated"
                         [matDatepicker]="picker" >
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -50,15 +50,21 @@
                 </mat-form-field>
                 <mat-form-field class="pet-description">
                     <mat-label>Input description</mat-label>
-                    <textarea matInput placeholder="Best pet ever..."></textarea>
+                    <textarea 
+                    matInput
+                    ngModel
+                    name="description"
+                    placeholder="Best pet ever..."></textarea>
                   </mat-form-field>
                 <button 
                     *ngIf="!isLoading"
                     type="submit" 
                     mat-raised-button 
                     color="primary"
-                    [disabled]="f.invalid">Register Pet</button>
-                <mat-spinner *ngIf="isLoading"></mat-spinner>
+                    [disabled]="f.invalid">Create Pet Profile</button>
+               <div fxLayout fxLayoutAlign="center">
+                    <mat-spinner *ngIf="isLoading"></mat-spinner>
+               </div>
         </form>
 </mat-card>
 </section>

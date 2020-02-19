@@ -51,13 +51,14 @@ export class PetsComponent implements OnInit, OnDestroy {
   }
 
   findAndDeletePet(selectedPetData) {
-    let found = this.pets.find(x => x.id === selectedPetData.id);
-    if (found) {
-      let index = this.pets.indexOf(found);
-      if (index !== -1) {
-        this.pets.splice(index, 1);
-      }
-    }
+    this.petsService.removePet(selectedPetData.id)
+    // let found = this.pets.find(x => x.id === selectedPetData.id);
+    // if (found) {
+    //   let index = this.pets.indexOf(found);
+    //   if (index !== -1) {
+    //     this.pets.splice(index, 1);
+    //   }
+    // }
   }
 
   ngOnInit(): void {

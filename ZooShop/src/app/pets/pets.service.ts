@@ -6,133 +6,73 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { map } from 'rxjs/operators';
+import { UserService } from '../shared/user.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable(
+  // { providedIn: 'root' }
+)
 export class PetsService {
   ownedPets$ = new Subject<Pet[]>();
 
-  pets: Pet[] = [
-    {
-      id: '3123',
-      name: 'kudjo',
-      type: 'dog',
-      lastVaccinationDate: new Date(2018, 11, 24),
-      passportId: '12333',
-      description: 'happydog'
-    },
-    {
-      id: '333',
-      name: 'garfield',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    },
-    {
-      id: '3333',
-      name: 'Top-Cat',
-      type: 'cat',
-    }
-  ];
+  private currentPets: Pet[] = [];
 
   constructor(
-    private uiService: UIService,
     private router: Router,
     private db: AngularFirestore,
+    private uiService: UIService,
+    private userService: UserService
   ) { }
 
   addPet(pet: Pet) {
     this.uiService.loadingStateChanged$.next(true);
-    // this.db.collection('finishedExercises').add({
-    //   id: 'test',
-    //   name: 'test',
-    //   duration: 555,
-    //   calories: 555,
-    // });
-    // this.db
-    //   .collection('Animals')
-    //   .add({
-    //     type: 'bird'
-    //   });
-    console.log(`adding a pet`);
 
-    console.log(pet.name);
-    console.log(pet.type);
+    let shipPetDataToServer = () => {
+      this.uiService.addingNewPet$.next(false);
+      this.uiService.showSnackbar('Pet Created', null, 3000);
+      this.uiService.loadingStateChanged$.next(false);
+    }
 
     this.db
-      .collection('CustomersPet')
+      .collection("ShopUsers")
+      .doc(this.userService.userEmail)
+      .collection('pets')
       .add({
         name: pet.name,
-        type: pet.type
+        type: pet.type,
+        owner: pet.owner || 'unknown',
+      })
+      .then(result => {
+        console.log('pet added');
+        shipPetDataToServer();
+      })
+      .catch(error => {
+        console.log('pet wasnt added');
+        console.log(error);
+        shipPetDataToServer();
       });
-    // this.db
-    //   .collection('ShopUsers')
-    //   .doc('evertrading62@gmail.com')
-    //   .collection('pets')
-    //   .add({
-    //     type: pet.type,
-    //     name: pet.name,
-    //   });
-    // this.db
-    //   .collection('Animals')
-    //   .add(pet)
-    //   .then(result => {
-    //     console.log(result);
-    //     // this.authSuccessfully();
-    //     this.uiService.addingNewPet$.next(false);
-    //     this.uiService.showSnackbar('Pet Created', null, 3000);
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //     this.uiService.addingNewPet$.next(false);
-    //     this.uiService.showSnackbar(error.message, null, 3000);
-    //   })
   }
 
-  removePet() {
-
+  removePet(selectedId: string) {
+    this.uiService.loadingStateChanged$.next(true);
+    this.db
+      .doc('ShopUsers/' + this.userService.userEmail + '/pets/' + selectedId)
+      .delete()
+      .then((success) => {
+        console.log(`successfuly deleted pet`);
+        this.uiService.loadingStateChanged$.next(false);
+        this.uiService.showSnackbar('Successfuly removed pet', null, 3000);
+      }, error => {
+        console.log(`didnt find pet to dell it`);
+        this.uiService.loadingStateChanged$.next(false);
+        this.uiService.showSnackbar('Could not find pet in db, call admin', null, 3000);
+      });
   }
 
   fetchUserPets() {
-    // return ;
-    setTimeout(() => {
-      this.ownedPets$.next(this.pets);
-    }, 1000 * 2);
-
-    // this.db
-    //   .collection('Animals')
-    //   .valueChanges()
-    //   .subscribe((pets: Pet[]) => {
-    //     this.ownedPets$.next(pets);
-    //   });
-
-    this.fetchUserData();
-  }
-
-  fetchUserData() {
     this.uiService.loadingStateChanged$.next(true);
     this.db
       .collection('ShopUsers')
-      .doc('evertrading62@gmail.com')
+      .doc(this.userService.userEmail)
       .collection('pets')
       .snapshotChanges()
       .pipe(
@@ -141,14 +81,17 @@ export class PetsService {
             return {
               id: dbPet.payload.doc.id,
               name: (dbPet.payload.doc.data() as Pet).name,
-              duration: (dbPet.payload.doc.data() as Pet).type,
+              type: (dbPet.payload.doc.data() as Pet).type,
             };
           });
         }))
-      .subscribe((result) => {
+      .subscribe((result: Pet[]) => {
         console.log(`--------------fetchUserData-------- start`);
         console.log(result);
         console.log(`--------------fetchUserData-------- end`);
+
+        this.ownedPets$.next(result);
+        this.currentPets = result;
         this.uiService.loadingStateChanged$.next(false);
       }, error => {
         console.log(`--------------fetchUserData error-------- start`);
@@ -156,13 +99,6 @@ export class PetsService {
         console.log(`--------------fetchUserData error-------- end`);
         this.uiService.loadingStateChanged$.next(false);
       });
-    // .snapshotChanges()
-    // .pipe(
-
   }
 
-  private authSuccessfully() {
-    this.ownedPets$.next(null);
-    this.router.navigate(['/training']);
-  }
 }
