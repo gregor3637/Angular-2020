@@ -1,0 +1,23 @@
+<div class="addPet" fxLayoutAlign="center center">
+    <button mat-raised-button color="primary">Add new pet</button>
+</div>
+<div class="cards" fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center">
+    <mat-card class="example-card" *ngFor="let pet of pets" fxFlex="0 1 calc(33.3% - 32px)">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>{{pet.name}}</mat-card-title>
+            <mat-card-subtitle>{{pet.type}}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+
+        <mat-card-content>
+            <p *ngIf="pet.description">description{{pet.description}} </p>
+            <p *ngIf="pet.lastVaccinationDate">Last vaccination: {{pet.lastVaccinationDate | date}}</p>
+            <p *ngIf="pet.passportId">Passport ID: {{pet.passportId}}</p>
+        </mat-card-content>
+        <mat-card-actions class="pet-action-buttons">
+            <button mat-button (click)="onEditHandler(pet)">EDIT</button>
+            <button mat-button (click)="onDeleteHandler(pet)">DELETE</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
