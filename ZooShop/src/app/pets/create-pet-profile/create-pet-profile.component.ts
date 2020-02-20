@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PetsService } from '../pets.service';
-import { Pet } from '../pet.model';
 import { UIService } from 'src/app/shared/ui.service';
 import { Subscription } from 'rxjs/Subscription';
-import { UserService } from 'src/app/shared/user.service';
+import { ProfileService } from 'src/app/profile/profile.service';
 
 @Component({
   selector: 'app-create-pet-profile',
@@ -20,14 +19,14 @@ export class CreatePetProfileComponent implements OnInit, OnDestroy {
   constructor(
     private petService: PetsService,
     private uiService: UIService,
-    private userService: UserService,
+    private profileService: ProfileService,
   ) { }
 
   onCreatePetProfile(form: NgForm) {
     this.petService.addPet({
       //TODO get Real ID from db
       id: '0',
-      owner: this.userService.userEmail,
+      owner: this.profileService.profile.email,
       name: form.value.name,
       type: form.value.type,
       passportId: form.value.passportId,

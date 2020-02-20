@@ -13,14 +13,12 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth.guard';
 import { environment } from '../environments/environment';
-import { AngularFireAuthModule } from 'angularfire2/auth';
 import { UIService } from './shared/ui.service';
 import { AuthModule } from './auth/auth.module';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { PetsModule } from './pets/pets.module';
 import { ShopModule } from './shop/shop.module';
 import { PetsService } from './pets/pets.service';
-import { UserService } from './shared/user.service';
 import { ProfileService } from './profile/profile.service';
 
 @NgModule({
@@ -47,7 +45,6 @@ import { ProfileService } from './profile/profile.service';
     AuthGuard,
     UIService,
     PetsService,
-    UserService,
     ProfileService,
   ],
   bootstrap: [AppComponent],

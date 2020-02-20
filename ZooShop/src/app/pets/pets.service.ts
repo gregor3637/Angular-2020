@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Pet } from './pet.model';
 import { UIService } from '../shared/ui.service';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { map } from 'rxjs/operators';
-import { UserService } from '../shared/user.service';
+import { ProfileService } from '../profile/profile.service';
 
-@Injectable(
-  // { providedIn: 'root' }
-)
+@Injectable()
 export class PetsService {
   petTypes$ = new Subject<string[]>();
   ownedPets$ = new Subject<Pet[]>();
@@ -21,7 +18,7 @@ export class PetsService {
     private router: Router,
     private db: AngularFirestore,
     private uiService: UIService,
-    private userService: UserService
+    private profileService: ProfileService,
   ) { }
 
   addPet(pet: Pet) {
@@ -52,7 +49,7 @@ export class PetsService {
 
     this.db
       .collection("ShopUsers")
-      .doc(this.userService.userEmail)
+      .doc(this.profileService.profile.email)
       .collection('pets')
       .add(petData)
       .then(result => {
@@ -87,7 +84,7 @@ export class PetsService {
 
     this.db
       .collection("ShopUsers")
-      .doc(this.userService.userEmail)
+      .doc(this.profileService.profile.email)
       .collection('pets')
       .doc(this.edittedPetData.id)
       .update(petData)
@@ -106,7 +103,7 @@ export class PetsService {
   removePet(selectedId: string) {
     this.uiService.loadingStateChanged$.next(true);
     this.db
-      .doc('ShopUsers/' + this.userService.userEmail + '/pets/' + selectedId)
+      .doc('ShopUsers/' + this.profileService.profile.email + '/pets/' + selectedId)
       .delete()
       .then((success) => {
         console.log(`successfuly deleted pet`);
@@ -123,7 +120,7 @@ export class PetsService {
     this.uiService.loadingStateChanged$.next(true);
     this.db
       .collection('ShopUsers')
-      .doc(this.userService.userEmail)
+      .doc(this.profileService.profile.email)
       .collection('pets')
       .snapshotChanges()
       .pipe(

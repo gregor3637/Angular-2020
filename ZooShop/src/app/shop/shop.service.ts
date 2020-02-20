@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { UIService } from '../shared/ui.service';
 import { map } from 'rxjs/operators';
-import { UserService } from '../shared/user.service';
+import { ProfileService } from '../profile/profile.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class ShopService {
     private router: Router,
     private db: AngularFirestore,
     private uiService: UIService,
-    private userService: UserService,
+    private profileService: ProfileService,
   ) { }
 
   fetchShopItems() {
@@ -64,7 +64,7 @@ export class ShopService {
 
     this.db
       .collection('ShopUsers')
-      .doc(this.userService.userEmail)
+      .doc(this.profileService.profile.email)
       .collection('purchesedItems')
       .add(d)
       .then(result => {
