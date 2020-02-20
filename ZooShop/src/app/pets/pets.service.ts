@@ -13,7 +13,7 @@ import { UserService } from '../shared/user.service';
 )
 export class PetsService {
   ownedPets$ = new Subject<Pet[]>();
-
+  edittedPetData: Pet;
   private currentPets: Pet[] = [];
 
   constructor(
@@ -32,15 +32,28 @@ export class PetsService {
       this.uiService.loadingStateChanged$.next(false);
     }
 
+    let petData = {};
+    petData['name'] = pet.name;
+    petData['type'] = pet.type;
+    if (pet.owner) {
+      petData['owner'] = pet.owner;
+    }
+    if (pet.passportId) {
+      petData['passportId'] = pet.passportId;
+    }
+    if (pet.passportId) {
+      petData['lastVaccinationDate'] = pet.lastVaccinationDate;
+    }
+    if (pet.description) {
+      petData['description'] = pet.description;
+    }
+
+
     this.db
       .collection("ShopUsers")
       .doc(this.userService.userEmail)
       .collection('pets')
-      .add({
-        name: pet.name,
-        type: pet.type,
-        owner: pet.owner || 'unknown',
-      })
+      .add(petData)
       .then(result => {
         console.log('pet added');
         shipPetDataToServer();
@@ -49,6 +62,43 @@ export class PetsService {
         console.log('pet wasnt added');
         console.log(error);
         shipPetDataToServer();
+      });
+  }
+
+  editPet(pet: any | Pet) {
+    let petData = {};
+
+    if (pet.name) {
+      petData['name'] = pet.name;
+    }
+    if (pet.owner) {
+      petData['owner'] = pet.owner;
+    }
+    if (pet.passportId) {
+      petData['passportId'] = pet.passportId;
+    }
+    if (pet.passportId) {
+      petData['lastVaccinationDate'] = pet.lastVaccinationDate;
+    }
+    if (pet.description) {
+      petData['description'] = pet.description;
+    }
+
+    this.db
+      .collection("ShopUsers")
+      .doc(this.userService.userEmail)
+      .collection('pets')
+      .doc(this.edittedPetData.id)
+      .update(petData)
+      .then(result => {
+        console.log('successfully updated');
+        this.router.navigate(['/pets'])
+        this.uiService.showSnackbar('successfully updated', null, 1500);
+      })
+      .catch(error => {
+        console.log('pet wasnt added');
+        console.log(error);
+        this.uiService.showSnackbar('Error: cound not update', null, 1500);
       });
   }
 
@@ -82,6 +132,10 @@ export class PetsService {
               id: dbPet.payload.doc.id,
               name: (dbPet.payload.doc.data() as Pet).name,
               type: (dbPet.payload.doc.data() as Pet).type,
+              owner: (dbPet.payload.doc.data() as Pet).owner,
+              passportId: (dbPet.payload.doc.data() as Pet).passportId,
+              lastVaccinationDate: (dbPet.payload.doc.data() as Pet).lastVaccinationDate,
+              description: (dbPet.payload.doc.data() as Pet).description,
             };
           });
         }))

@@ -25,9 +25,9 @@ export class CreatePetProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
   ) { }
 
-
   onCreatePetProfile(form: NgForm) {
     this.petService.addPet({
+      //TODO get Real ID from db
       id: '0',
       owner: this.userService.userEmail,
       name: form.value.name,
@@ -36,8 +36,6 @@ export class CreatePetProfileComponent implements OnInit, OnDestroy {
       lastVaccinationDate: form.value.lastVaccinationDate,
       description: form.value.description,
     });
-    // this.authService.registerUser();
-    // this.trainingService.startExercise(f.value.exercise);
   }
 
   fetchPetTypes() {

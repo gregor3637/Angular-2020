@@ -18,6 +18,10 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { UIService } from './shared/ui.service';
 import { AuthModule } from './auth/auth.module';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { PetsModule } from './pets/pets.module';
+import { ShopModule } from './shop/shop.module';
+import { PetsService } from './pets/pets.service';
+import { UserService } from './shared/user.service';
 
 @NgModule({
   declarations: [
@@ -35,12 +39,16 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
     AngularFireModule.initializeApp(environment.firebase),
     AuthModule,
     AngularFirestoreModule,
+    PetsModule,
+    ShopModule,
   ],
   providers: [
     AuthService,
     AuthGuard,
     TrainingService,
     UIService,
+    PetsService,
+    UserService,
   ],
   bootstrap: [AppComponent],
 })

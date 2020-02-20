@@ -1,0 +1,65 @@
+<section class="create-pet" fxLayout fxLayoutAlign="center">
+    <mat-card fxFlex.xs="100%" fxFlex="400px">
+        <form fxLayout="column" 
+            fxLayoutAlign="flex-start" 
+            #f="ngForm" 
+            fxLayoutGap="10px"
+            (ngSubmit)="updatePetProfile(f)">
+                <mat-form-field>
+                    <input matInput
+                        [ngModel]="edittedPet.name" 
+                        type="text"
+                        matInput 
+                        placeholder="Pet`s name"
+                        name="name"
+                        #petName="ngModel">
+                </mat-form-field>
+                <mat-form-field hintLabel="Should be 6 chars">
+                    <input matInput 
+                        [ngModel]="edittedPet.passportId"
+                        type="text"
+                        mathInput
+                        placeholder="passport ID"
+                        name="passportId"
+                        minlength="6"
+                        maxlength="6"
+                        #passportId="ngModel">
+                        <mat-hint align="end">{{passportId.value?.length}} / 6</mat-hint>
+                        <mat-error>Has to be 6 chars</mat-error>
+                </mat-form-field>
+                <mat-form-field>    
+                    <input matInput
+                        ngModel
+                        name="lastVaccinationDate"
+                        placeholder="Last vaccinated"
+                        [matDatepicker]="picker" >
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="pet-description">
+                    <mat-label>Input description</mat-label>
+                    <textarea matInput
+                        [ngModel]="edittedPet.description"
+                        name="description"
+                        placeholder="Best pet ever..."></textarea>
+                  </mat-form-field>
+                <div fxLayout="row"  fxLayoutAlign="space-evenly" >
+                    <button 
+                        *ngIf="!isLoading"
+                        type="submit" 
+                        mat-raised-button 
+                        [disabled]="!f.dirty || f.invalid"
+                        color="primary">Update Pet Profile</button>
+                    <button 
+                        *ngIf="!isLoading"
+                        type="submit" 
+                        mat-raised-button 
+                        color="primary"
+                        routerLink="/pets">Cancel</button>
+                </div>
+               <div fxLayout fxLayoutAlign="center">
+                    <mat-spinner *ngIf="isLoading"></mat-spinner>
+               </div>
+        </form>
+</mat-card>
+</section>

@@ -15,7 +15,6 @@ export class PetsComponent implements OnInit, OnDestroy {
   isValid = true;
   private petsSubscription: Subscription;
 
-  data: string[] = ['asd', 'fsd', 'tsas']
   pets: Pet[] = [];
   constructor(
     private dialog: MatDialog,
@@ -24,12 +23,11 @@ export class PetsComponent implements OnInit, OnDestroy {
   ) { }
 
   onEditHandler(selectedPetData) {
-    console.log(selectedPetData);
+    this.petsService.edittedPetData = selectedPetData;
+    this.router.navigate(['pets/edit']);
   }
 
   onDeleteHandler(selectedPetData) {
-    console.log(selectedPetData.name);
-
     const dialogRef = this.dialog.open(DeletePetComponent, {
       data: {
         name: selectedPetData.name
@@ -38,27 +36,17 @@ export class PetsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.findAndDeletePet(selectedPetData);
-      } else {
+        this.petsService.removePet(selectedPetData.id);
       }
     });
   }
 
   onAddNewPetHandler() {
     console.log('onAddNewPetHandler');
-
     this.router.navigate(['/pets/create']);
   }
 
   findAndDeletePet(selectedPetData) {
-    this.petsService.removePet(selectedPetData.id)
-    // let found = this.pets.find(x => x.id === selectedPetData.id);
-    // if (found) {
-    //   let index = this.pets.indexOf(found);
-    //   if (index !== -1) {
-    //     this.pets.splice(index, 1);
-    //   }
-    // }
   }
 
   ngOnInit(): void {

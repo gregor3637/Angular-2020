@@ -11,9 +11,9 @@
         <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
 
         <mat-card-content>
-            <p *ngIf="pet.description">description{{pet.description}} </p>
-            <p *ngIf="pet.lastVaccinationDate">Last vaccination: {{pet.lastVaccinationDate | date}}</p>
             <p *ngIf="pet.passportId">Passport ID: {{pet.passportId}}</p>
+            <p *ngIf="pet.lastVaccinationDate">Last vaccinated: {{pet.lastVaccinationDate.seconds * 1000  | date:'medium'}}</p>
+            <p *ngIf="pet.description">Description: {{pet.description}} </p>
         </mat-card-content>
         <mat-card-actions class="pet-action-buttons">
             <button mat-button (click)="onEditHandler(pet)">EDIT</button>

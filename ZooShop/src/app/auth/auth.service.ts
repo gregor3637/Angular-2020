@@ -9,6 +9,7 @@ import { UIService } from '../shared/ui.service';
 @Injectable()
 export class AuthService {
   authChange = new Subject<boolean>();
+  userEmailData$ = new Subject<string>();
   private isAuthenticated = false;
 
   constructor(
@@ -23,8 +24,8 @@ export class AuthService {
       .auth
       .createUserWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        console.log(result);
         this.authSuccessfully();
+        this.userEmailData$.next(result.user.email);
         this.uiService.loadingStateChanged$.next(false);
       })
       .catch(error => {
@@ -39,8 +40,8 @@ export class AuthService {
       .auth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        console.log(result);
         this.authSuccessfully();
+        this.userEmailData$.next(result.user.email);
         this.uiService.loadingStateChanged$.next(false);
       })
       .catch(error => {
