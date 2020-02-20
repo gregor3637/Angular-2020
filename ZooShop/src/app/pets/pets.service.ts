@@ -49,7 +49,7 @@ export class PetsService {
 
     this.db
       .collection("ShopUsers")
-      .doc(this.profileService.profile.email)
+      .doc(this.profileService.profile.dbID)
       .collection('pets')
       .add(petData)
       .then(result => {
@@ -84,7 +84,7 @@ export class PetsService {
 
     this.db
       .collection("ShopUsers")
-      .doc(this.profileService.profile.email)
+      .doc(this.profileService.profile.dbID)
       .collection('pets')
       .doc(this.edittedPetData.id)
       .update(petData)
@@ -103,7 +103,7 @@ export class PetsService {
   removePet(selectedId: string) {
     this.uiService.loadingStateChanged$.next(true);
     this.db
-      .doc('ShopUsers/' + this.profileService.profile.email + '/pets/' + selectedId)
+      .doc('ShopUsers/' + this.profileService.profile.dbID + '/pets/' + selectedId)
       .delete()
       .then((success) => {
         console.log(`successfuly deleted pet`);
@@ -120,7 +120,7 @@ export class PetsService {
     this.uiService.loadingStateChanged$.next(true);
     this.db
       .collection('ShopUsers')
-      .doc(this.profileService.profile.email)
+      .doc(this.profileService.profile.dbID)
       .collection('pets')
       .snapshotChanges()
       .pipe(

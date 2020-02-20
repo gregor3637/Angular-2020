@@ -10,6 +10,9 @@
         <mat-card-content>
             <p *ngIf="profile.description">Description: {{profile.description}} </p>
         </mat-card-content>
+        <mat-card-content>
+            <p *ngIf="profile.dbID">dbID: {{profile.dbID}} </p>
+        </mat-card-content>
     </mat-card>
     
     <mat-spinner *ngIf="!profile"></mat-spinner>

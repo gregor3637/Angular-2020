@@ -1,5 +1,5 @@
 export interface Profile {
-    id?: string,
+    dbID?: string,
     name: string,
     age: number,
     lastLogin: Date,
