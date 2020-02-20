@@ -7,6 +7,7 @@ import { DeletePetComponent } from './delete-pet/delete-pet.component';
 import { CreatePetProfileComponent } from './create-pet-profile/create-pet-profile.component';
 import { EditComponent } from './edit/edit.component';
 import { RouterModule } from '@angular/router';
+import { PetsRoutingModule } from './pets-routing.module';
 
 
 
@@ -21,7 +22,8 @@ import { RouterModule } from '@angular/router';
   imports: [
     SharedModule,
     MatCardModule,
-    RouterModule
+    RouterModule,
+    PetsRoutingModule,
   ],
 
   entryComponents: [DeletePetComponent]

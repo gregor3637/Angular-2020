@@ -10,34 +10,23 @@ import { EditComponent } from './pets/edit/edit.component';
 
 
 const routes: Routes = [
-  { path: '', component: WellcomeComponent },
-  // { path: 'training', loadChildren: './training/training-routing.module.ts' }
+  {
+    path: '',
+    component: WellcomeComponent
+  },
   {
     path: 'training',
     // canLoad: [AuthGuard],
     loadChildren: () => import('./training/training.module').then(m => m.TrainingModule)
   },
   {
-    path: 'shop',
-    component: ShopComponent
+    path: 'pets',
+    // canLoad: [AuthGuard],
+    loadChildren: () => import('./pets/pets.module').then(m => m.PetsModule)
   },
   {
-    path: 'pets',
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        component: PetsComponent,
-      },
-      {
-        path: 'create',
-        component: CreatePetProfileComponent
-      },
-      {
-        path: 'edit',
-        component: EditComponent
-      },
-    ]
+    path: 'shop',
+    component: ShopComponent
   },
 ];
 

@@ -24,7 +24,7 @@ export class PetsComponent implements OnInit, OnDestroy {
 
   onEditHandler(selectedPetData) {
     this.petsService.edittedPetData = selectedPetData;
-    this.router.navigate(['pets/edit']);
+    this.router.navigate(['/pets/edit']);
   }
 
   onDeleteHandler(selectedPetData) {

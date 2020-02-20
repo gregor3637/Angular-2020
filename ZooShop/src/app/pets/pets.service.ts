@@ -12,6 +12,7 @@ import { UserService } from '../shared/user.service';
   // { providedIn: 'root' }
 )
 export class PetsService {
+  petTypes$ = new Subject<string[]>();
   ownedPets$ = new Subject<Pet[]>();
   edittedPetData: Pet;
   private currentPets: Pet[] = [];
@@ -152,6 +153,23 @@ export class PetsService {
         console.log(error);
         console.log(`--------------fetchUserData error-------- end`);
         this.uiService.loadingStateChanged$.next(false);
+      });
+  }
+
+  fetchPetTypes() {
+    this.db
+      .collection('Animals')
+      .snapshotChanges()
+      .pipe(
+        map(dbPetstypesArray => {
+          return dbPetstypesArray.map((dbPetType) => (<any>dbPetType.payload.doc.data()).type);
+        }))
+      .subscribe((result: string[]) => {
+        this.petTypes$.next(result);
+      }, error => {
+        console.log(`--------------fetchUserData error-------- start`);
+        console.log(error);
+        console.log(`--------------fetchUserData error-------- end`);
       });
   }
 
