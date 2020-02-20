@@ -18,7 +18,11 @@ export class ProfileService {
     private authService: AuthService,
     private db: AngularFirestore,
     private uiService: UIService,
-  ) { }
+  ) {
+    this.authService.userEmailData$.subscribe(email => {
+      this.fetchUserData();
+    })
+  }
 
   fetchUserData() {
     this.db

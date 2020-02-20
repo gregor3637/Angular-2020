@@ -67,7 +67,7 @@ export class AuthService {
   private authSuccessfully() {
     this.isAuthenticated = true;
     this.authChange.next(true);
-    this.router.navigate(['/training']);
+    this.router.navigate(['/profile']);
   }
 
   isAuth() {

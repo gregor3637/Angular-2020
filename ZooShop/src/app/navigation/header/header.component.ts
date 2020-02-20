@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/cor
 import { Subscription } from 'rxjs/Subscription';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserService } from 'src/app/shared/user.service';
+import { ProfileService } from 'src/app/profile/profile.service';
 
 @Component({
   selector: 'app-header',
@@ -14,12 +15,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authSubscription: Subscription;
 
   get username() {
-    return this.userService.userEmail;
+    return this.profileService?.profile?.email || 'undefined';
   }
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
+    private profileService: ProfileService
   ) { }
 
   onToggleSidenav() {
