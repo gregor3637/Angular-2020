@@ -27,9 +27,9 @@ export class PetsService {
   addPet(pet: Pet) {
     this.uiService.loadingStateChanged$.next(true);
 
-    let shipPetDataToServer = () => {
+    let dbResponseNotifications = (snackBarMessage: string) => {
       this.uiService.addingNewPet$.next(false);
-      this.uiService.showSnackbar('Pet Created', null, 3000);
+      this.uiService.showSnackbar(snackBarMessage, null, 3000);
       this.uiService.loadingStateChanged$.next(false);
     }
 
@@ -57,12 +57,12 @@ export class PetsService {
       .add(petData)
       .then(result => {
         console.log('pet added');
-        shipPetDataToServer();
+        dbResponseNotifications('pet added');
       })
       .catch(error => {
         console.log('pet wasnt added');
         console.log(error);
-        shipPetDataToServer();
+        dbResponseNotifications('pet wasnt added');
       });
   }
 
