@@ -1,7 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthService } from 'src/app/auth/auth.service';
-import { UserService } from 'src/app/shared/user.service';
 import { ProfileService } from 'src/app/profile/profile.service';
 
 @Component({
@@ -15,7 +14,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authSubscription: Subscription;
 
   get username() {
-    return this.profileService?.profile?.email || 'undefined';
+    return this.profileService?.profile?.email;
   }
 
   constructor(

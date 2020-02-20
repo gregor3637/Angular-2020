@@ -12,17 +12,17 @@ const routes: Routes = [
   },
   {
     path: 'pets',
-    // canLoad: [AuthGuard],
+    canLoad: [AuthGuard],
     loadChildren: () => import('./pets/pets.module').then(m => m.PetsModule)
   },
   {
     path: 'shop',
-    // canLoad: [AuthGuard],
+    canLoad: [AuthGuard],
     loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule)
   },
   {
     path: 'profile',
-    // canLoad: [AuthGuard],
+    canLoad: [AuthGuard],
     loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
   },
 ];
