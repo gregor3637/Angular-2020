@@ -13,12 +13,10 @@ import { UserService } from 'src/app/shared/user.service';
 })
 export class CreatePetProfileComponent implements OnInit, OnDestroy {
   private loadingSubscription: Subscription;
-  petTypes: string[] = [
-    'cat',
-    'dog',
-    'fish',
-  ];
+  private petTypesSubscription: Subscription;
+  petTypes: string[] = [];
   isLoading = false;
+
   constructor(
     private petService: PetsService,
     private uiService: UIService,
@@ -38,8 +36,13 @@ export class CreatePetProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  fetchPetTypes() {
-
+  getPetTypes() {
+    this.petTypesSubscription = this.petService
+      .petTypes$
+      .subscribe(types => {
+        this.petTypes = types
+      });
+    this.petService.fetchPetTypes();
   }
 
   ngOnInit(): void {
@@ -48,11 +51,16 @@ export class CreatePetProfileComponent implements OnInit, OnDestroy {
       .subscribe(isLoading => {
         this.isLoading = isLoading
       });
+
+    this.getPetTypes();
   }
 
   ngOnDestroy() {
     if (this.loadingSubscription) {
       this.loadingSubscription.unsubscribe();
+    }
+    if (this.petTypesSubscription) {
+      this.petTypesSubscription.unsubscribe();
     }
   }
 
