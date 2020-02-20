@@ -3,10 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { WellcomeComponent } from './wellcome/wellcome.component';
 import { AuthGuard } from './auth/auth.guard';
-import { ShopComponent } from './shop/shop/shop.component';
-import { PetsComponent } from './pets/pets/pets.component';
-import { CreatePetProfileComponent } from './pets/create-pet-profile/create-pet-profile.component';
-import { EditComponent } from './pets/edit/edit.component';
 
 
 const routes: Routes = [
@@ -26,7 +22,13 @@ const routes: Routes = [
   },
   {
     path: 'shop',
-    component: ShopComponent
+    // canLoad: [AuthGuard],
+    loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule)
+  },
+  {
+    path: 'profile',
+    // canLoad: [AuthGuard],
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
 ];
 
