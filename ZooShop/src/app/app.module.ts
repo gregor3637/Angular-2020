@@ -12,7 +12,6 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth.guard';
-import { TrainingService } from './training/training.service';
 import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { UIService } from './shared/ui.service';
@@ -22,6 +21,7 @@ import { PetsModule } from './pets/pets.module';
 import { ShopModule } from './shop/shop.module';
 import { PetsService } from './pets/pets.service';
 import { UserService } from './shared/user.service';
+import { ProfileService } from './profile/profile.service';
 
 @NgModule({
   declarations: [
@@ -45,10 +45,10 @@ import { UserService } from './shared/user.service';
   providers: [
     AuthService,
     AuthGuard,
-    TrainingService,
     UIService,
     PetsService,
     UserService,
+    ProfileService,
   ],
   bootstrap: [AppComponent],
 })

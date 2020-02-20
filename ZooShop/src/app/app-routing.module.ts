@@ -11,11 +11,6 @@ const routes: Routes = [
     component: WellcomeComponent
   },
   {
-    path: 'training',
-    // canLoad: [AuthGuard],
-    loadChildren: () => import('./training/training.module').then(m => m.TrainingModule)
-  },
-  {
     path: 'pets',
     // canLoad: [AuthGuard],
     loadChildren: () => import('./pets/pets.module').then(m => m.PetsModule)
@@ -28,7 +23,7 @@ const routes: Routes = [
   {
     path: 'profile',
     // canLoad: [AuthGuard],
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+    loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
   },
 ];
 

@@ -1,0 +1,59 @@
+<p>edit works!</p>
+
+<section class="create-pet" fxLayout fxLayoutAlign="center">
+    <mat-card fxFlex.xs="100%" fxFlex="400px" *ngIf="userData">
+        <form fxLayout="column" 
+            fxLayoutAlign="flex-start" 
+            #f="ngForm" 
+            fxLayoutGap="10px"
+            (ngSubmit)="updateProfile(f)">
+                <mat-form-field>
+                    <input matInput
+                        [ngModel]="userData.name" 
+                        type="text"
+                        matInput 
+                        placeholder="name"
+                        name="name">
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput
+                        [ngModel]="userData.age" 
+                        type="number"
+                        matInput 
+                        placeholder="age"
+                        name="age">
+                </mat-form-field>
+                <mat-form-field class="pet-description">
+                    <mat-label>Input description</mat-label>
+                    <textarea matInput
+                        [ngModel]="userData.description"
+                        name="description"
+                        placeholder="Description"></textarea>
+                  </mat-form-field>
+
+
+
+                <div fxLayout="row"  fxLayoutAlign="space-evenly" >
+                    <button 
+                        *ngIf="!isLoading"
+                        type="submit" 
+                        mat-raised-button 
+                        [disabled]="!f.dirty || f.invalid"
+                        color="primary">Update Profile</button>
+                    <button 
+                        *ngIf="!isLoading"
+                        type="submit" 
+                        mat-raised-button 
+                        color="primary"
+                        routerLink="/profile">Cancel</button>
+                </div>
+
+
+
+
+               <div fxLayout fxLayoutAlign="center">
+                    <mat-spinner *ngIf="isLoading"></mat-spinner>
+               </div>
+        </form>
+</mat-card>
+</section>
