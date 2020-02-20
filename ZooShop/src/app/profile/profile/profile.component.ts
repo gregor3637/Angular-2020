@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { UIService } from 'src/app/shared/ui.service';
 import { Subscription } from 'rxjs/Subscription';
+import { Profile } from '../profile.model';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +28,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-
+    // this.profileService.profileChanged$.subscribe(newProfile =>{
+    //   this.profile = new this.profile;
+    // })
   }
 
   onEditHandler() {
@@ -35,7 +38,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.profileService.fetchUserData();
+    // this.profileService.fetchUserData();
   }
 
 

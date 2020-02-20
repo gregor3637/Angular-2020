@@ -11,6 +11,7 @@ import { ProfileService } from '../profile/profile.service';
 export class AuthService {
   authChange = new Subject<boolean>();
   userEmailData$ = new Subject<string>();
+  newUser$ = new Subject<string>();
   private isAuthenticated = false;
   _email: string;
 
@@ -22,6 +23,7 @@ export class AuthService {
     private router: Router,
     private angularFireAuth: AngularFireAuth,
     private uiService: UIService,
+    private profileService: ProfileService,
   ) { }
 
   registerUser(authData: AuthData) {
@@ -30,9 +32,11 @@ export class AuthService {
       .auth
       .createUserWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        this.authSuccessfully();
-        this.userEmailData$.next(result.user.email);
-        this.uiService.loadingStateChanged$.next(false);
+        this.profileService.newProfileCreated$.subscribe(successfull => {
+          this.uiService.loadingStateChanged$.next(false);
+          this.authSuccessfully();
+        })
+        this.profileService.createNewDB(result.user.email);
       })
       .catch(error => {
         this.uiService.loadingStateChanged$.next(false);
