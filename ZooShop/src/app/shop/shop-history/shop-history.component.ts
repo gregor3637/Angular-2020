@@ -6,34 +6,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ShopService } from '../shop.service';
 import { Subscription } from 'rxjs';
 
-
-const DUMMY_DATA: ShopItem[] = [
-  {
-    id: 'someData',
-    image: `food-dog`,
-    name: 'petFood',
-    price: 10,
-    quantity: 100,
-    position: 1,
-  },
-  {
-    id: 'someData',
-    image: `food-cat`,
-    name: 'catFood',
-    price: 10,
-    quantity: 2200,
-    position: 22,
-  },
-  {
-    id: 'someData',
-    image: `food-fish`,
-    name: 'someData',
-    price: 10,
-    quantity: 333300,
-    position: 3333,
-  },
-];
-
 @Component({
   selector: 'app-shop-history',
   templateUrl: './shop-history.component.html',
@@ -42,14 +14,14 @@ const DUMMY_DATA: ShopItem[] = [
 export class ShopHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
   private purchasedHistorySubscription: Subscription;
 
-
   displayedColumns = [
     'image',
     'name',
+    'date',
     'price',
     'quantity'
   ];
-  dataSource = new MatTableDataSource<ShopItem>(DUMMY_DATA);
+  dataSource = new MatTableDataSource<ShopItem>();
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -69,16 +41,41 @@ export class ShopHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.purchasedHistorySubscription = this.shopService
       .purchasedHistoryChanged$
-      .subscribe((items: ShopItem[]) => {
-        this.dataSource.data = items;
+      .subscribe((shopHistoryData: any[]) => {
+        this.dataSource.data = this.displayHistoryInTable(shopHistoryData);
       });
     this.shopService.fetchPurchasedHistory();
+  }
+
+  displayHistoryInTable(dbShopPurchesHistory: any[]) {
+    let allItemsInHistory: ShopItem[] = [];
+
+    dbShopPurchesHistory.map(singleOrder => {
+      let convertedDate = new Date(singleOrder.date.seconds * 1000);
+      let orderItems: ShopItem[] = [];
+
+      for (const key in singleOrder) {
+        if (singleOrder.hasOwnProperty(key)) {
+          if (key != 'date') {
+            const purchaseInfo = singleOrder[key];
+            purchaseInfo['date'] = convertedDate;
+            purchaseInfo['quantity'] = +purchaseInfo['quantity'];
+            orderItems.push(purchaseInfo as ShopItem);
+          }
+        }
+      }
+
+      allItemsInHistory = allItemsInHistory.concat(orderItems);
+    })
+
+    return allItemsInHistory;
   }
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
+
   ngOnDestroy() {
     if (this.purchasedHistorySubscription) {
       this.purchasedHistorySubscription.unsubscribe();

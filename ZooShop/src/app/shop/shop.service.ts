@@ -12,7 +12,7 @@ import { ProfileService } from '../profile/profile.service';
 })
 export class ShopService {
   items$ = new Subject<ShopItem[]>();
-  purchasedHistoryChanged$ = new Subject<ShopItem[]>();
+  purchasedHistoryChanged$ = new Subject<any[]>();
   private items: ShopItem[] = [];
 
   constructor(
@@ -59,13 +59,14 @@ export class ShopService {
     let data = JSON.parse(JSON.stringify(items));
 
     let d = {};
+    d['date'] = new Date();
     for (let i = 0; i < items.length; i++) {
       d[i] = items[i];
     }
 
     this.db
       .collection('ShopUsers')
-      .doc(this.profileService.profile.email)
+      .doc(this.profileService.profile.dbID)
       .collection('purchesedItems')
       .add(d)
       .then(result => {
@@ -79,10 +80,10 @@ export class ShopService {
   fetchPurchasedHistory() {
     this.db
       .collection('ShopUsers')
-      .doc(this.profileService.profile.email)
+      .doc(this.profileService.profile.dbID)
       .collection('purchesedItems')
       .valueChanges()
-      .subscribe((shopItems: ShopItem[]) => {
+      .subscribe((shopItems: any[]) => {
         this.purchasedHistoryChanged$.next(shopItems);
       });
   }

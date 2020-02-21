@@ -36,7 +36,7 @@ export class AuthService {
           this.uiService.loadingStateChanged$.next(false);
           this.authSuccessfully();
         })
-        this.profileService.createNewDB(result.user.email);
+        this.profileService.createNewDB(result.user.email, result.user.uid);
       })
       .catch(error => {
         this.uiService.loadingStateChanged$.next(false);
@@ -59,7 +59,7 @@ export class AuthService {
           this.uiService.showSnackbar(`${errpr}`, null, 3000);
           this.uiService.loadingStateChanged$.next(false);
         })
-        this.profileService.fetchUserData(authData.email);
+        this.profileService.fetchUserData(result.user.uid);
       })
       .catch(error => {
         this.uiService.loadingStateChanged$.next(false);

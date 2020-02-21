@@ -19,9 +19,9 @@ export class ProfileService {
     private uiService: UIService,
   ) { }
 
-  createNewDB(email: string) {
+  createNewDB(email: string, gui: string) {
     let freshProfile: Profile = {
-      dbID: '000000',
+      dbID: gui,
       name: 'n/a',
       age: 0,
       lastLogin: new Date(),
@@ -32,9 +32,9 @@ export class ProfileService {
 
     this.db
       .collection("ShopUsers")
-      .add(freshProfile)
+      .doc(gui)
+      .set(freshProfile)
       .then(result => {
-        freshProfile.dbID = result.id;
         this.profile = freshProfile;
         this.newProfileCreated$.next(true);
       })
@@ -43,25 +43,27 @@ export class ProfileService {
       });
   }
 
-  fetchUserData(email: string) {
-    // this.avisos = this.db
-    //   .collection('ShopUsers', ref => ref.where('email', '==', email).
-    let avisos = this.db
-      .collection('ShopUsers', ref => ref.where('email', '==', email))
-      .valueChanges()
-      .subscribe((newProfileData) => {
-        this.profile = newProfileData as unknown as Profile;
-        this.profileChanged$.next(this.profile);
-      });
-
-    // this.db
-    //   .collection('ShopUsers')
-    //   .doc(email)
+  fetchUserData(uid: string) {
+    // let avisos = this.db
+    //   .collection('ShopUsers', ref => ref.where('email', '==', email))
     //   .valueChanges()
     //   .subscribe((newProfileData) => {
     //     this.profile = newProfileData as unknown as Profile;
     //     this.profileChanged$.next(this.profile);
     //   });
+
+    this.db
+      .collection('ShopUsers')
+      .doc(uid)
+      .valueChanges()
+      .subscribe((newProfileData) => {
+        this.profile = newProfileData as unknown as Profile;
+        this.profileChanged$.next(this.profile);
+
+        console.log('hope this works start');
+        console.log(this.profile);
+        console.log('hope this works end ');
+      });
   }
 
   edit(data: { name?: string, description?: string, age?: number }) {

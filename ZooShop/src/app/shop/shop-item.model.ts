@@ -4,6 +4,7 @@ export interface ShopItem {
     name: string;
     price: number;
     quantity: number;
-    position: number;
+    position?: number;
     serverId?: string;
+    date?: Date;
 }
