@@ -17,10 +17,7 @@ export class ProfileService {
     private router: Router,
     private db: AngularFirestore,
     private uiService: UIService,
-  ) {
-
-  }
-
+  ) { }
 
   createNewDB(email: string) {
     let freshProfile: Profile = {
@@ -37,30 +34,34 @@ export class ProfileService {
       .collection("ShopUsers")
       .add(freshProfile)
       .then(result => {
-        freshProfile.dbID = '07if55W0NEnAH5A4CdR7';
+        freshProfile.dbID = result.id;
         this.profile = freshProfile;
         this.newProfileCreated$.next(true);
       })
       .catch(error => {
         this.newProfileCreated$.next(false);
-      })
-
-    this.db
-      .collection("ShopUsers")
-      .doc(email)
-      .collection('pets')
-      .add({ t: 'a' });
+      });
   }
 
   fetchUserData(email: string) {
-    this.db
-      .collection('ShopUsers')
-      .doc(email)
+    // this.avisos = this.db
+    //   .collection('ShopUsers', ref => ref.where('email', '==', email).
+    let avisos = this.db
+      .collection('ShopUsers', ref => ref.where('email', '==', email))
       .valueChanges()
       .subscribe((newProfileData) => {
         this.profile = newProfileData as unknown as Profile;
         this.profileChanged$.next(this.profile);
       });
+
+    // this.db
+    //   .collection('ShopUsers')
+    //   .doc(email)
+    //   .valueChanges()
+    //   .subscribe((newProfileData) => {
+    //     this.profile = newProfileData as unknown as Profile;
+    //     this.profileChanged$.next(this.profile);
+    //   });
   }
 
   edit(data: { name?: string, description?: string, age?: number }) {

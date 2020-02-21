@@ -50,10 +50,16 @@ export class AuthService {
       .auth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        this.authSuccessfully();
-        this._email = result.user.email;
-        this.userEmailData$.next(result.user.email);
-        this.uiService.loadingStateChanged$.next(false);
+        this.profileService.profileChanged$.subscribe(data => {
+          this.authSuccessfully();
+          this._email = result.user.email;
+          this.userEmailData$.next(result.user.email);
+          this.uiService.loadingStateChanged$.next(false);
+        }, errpr => {
+          this.uiService.showSnackbar(`${errpr}`, null, 3000);
+          this.uiService.loadingStateChanged$.next(false);
+        })
+        this.profileService.fetchUserData(authData.email);
       })
       .catch(error => {
         this.uiService.loadingStateChanged$.next(false);

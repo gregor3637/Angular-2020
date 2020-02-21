@@ -12,6 +12,7 @@ import { ProfileService } from '../profile/profile.service';
 })
 export class ShopService {
   items$ = new Subject<ShopItem[]>();
+  purchasedHistoryChanged$ = new Subject<ShopItem[]>();
   private items: ShopItem[] = [];
 
   constructor(
@@ -72,6 +73,17 @@ export class ShopService {
       })
       .catch(error => {
         dbResponseNotifications('Fail to  purchase');
+      });
+  }
+
+  fetchPurchasedHistory() {
+    this.db
+      .collection('ShopUsers')
+      .doc(this.profileService.profile.email)
+      .collection('purchesedItems')
+      .valueChanges()
+      .subscribe((shopItems: ShopItem[]) => {
+        this.purchasedHistoryChanged$.next(shopItems);
       });
   }
 }
