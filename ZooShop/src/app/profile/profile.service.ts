@@ -36,6 +36,7 @@ export class ProfileService {
       .set(freshProfile)
       .then(result => {
         this.profile = freshProfile;
+        localStorage.setItem('gui', JSON.stringify(gui))
         this.newProfileCreated$.next(true);
       })
       .catch(error => {
@@ -43,18 +44,12 @@ export class ProfileService {
       });
   }
 
-  fetchUserData(uid: string) {
-    // let avisos = this.db
-    //   .collection('ShopUsers', ref => ref.where('email', '==', email))
-    //   .valueChanges()
-    //   .subscribe((newProfileData) => {
-    //     this.profile = newProfileData as unknown as Profile;
-    //     this.profileChanged$.next(this.profile);
-    //   });
+  fetchUserData(gui: string) {
+    localStorage.setItem('gui', JSON.stringify(gui))
 
     this.db
       .collection('ShopUsers')
-      .doc(uid)
+      .doc(gui)
       .valueChanges()
       .subscribe((newProfileData) => {
         this.profile = newProfileData as unknown as Profile;

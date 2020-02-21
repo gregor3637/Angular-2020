@@ -4,6 +4,7 @@ import { ProfileService } from '../profile.service';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import * as firebase from 'firebase';
+import { UIService } from 'src/app/shared/ui.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -13,6 +14,7 @@ import * as firebase from 'firebase';
 export class EditProfileComponent implements OnInit {
   isLoading = false;
   selectedFile: File = null;
+  isUploadingFile = false;
 
   get userData(): Profile {
     return this.userProfileService.profile;
@@ -20,6 +22,7 @@ export class EditProfileComponent implements OnInit {
 
   constructor(
     private userProfileService: ProfileService,
+    private uiService: UIService,
     private http: HttpClient
   ) { }
 
@@ -37,26 +40,31 @@ export class EditProfileComponent implements OnInit {
   }
 
   onUpload() {
-    let storageRef = firebase.storage().ref();
-    let imagesRef = storageRef.child('images/' + this.selectedFile.name);
-    let task = imagesRef.put(this.selectedFile);
+    if (!this.selectedFile) {
+      this.uiService.showSnackbar('Please select a file', null, 2000);
+    }
+    else {
+      this.isUploadingFile = true;
+      let storageRef = firebase.storage().ref();
+      let imagesRef = storageRef.child('images/' + this.selectedFile.name);
+      let task = imagesRef.put(this.selectedFile);
 
-    task.on('state_changed',
+      task.on('state_changed',
+        (snapshot) => {
+          let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(percentage);
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {
+          console.log('upload Completed completed');
+          this.uiService.showSnackbar('Upload Completed', null, 2000);
+          this.isUploadingFile = false;
+        }
+      );
+    }
 
-      function progress(snapshot) {
-        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(percentage);
-      },
-
-      function error(err) {
-        console.log(err);
-      },
-
-      function complete() {
-        console.log('upload Completed completed');
-      }
-
-    );
   }
 
   ngOnInit(): void {

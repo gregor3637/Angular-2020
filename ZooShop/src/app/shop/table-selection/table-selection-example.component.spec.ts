@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableSelectionExampleComponent } from './table-selection-example.component';
+import { TableSelectionComponent } from './table-selection.component';
 
 describe('TableSelectionExampleComponent', () => {
-  let component: TableSelectionExampleComponent;
-  let fixture: ComponentFixture<TableSelectionExampleComponent>;
+  let component: TableSelectionComponent;
+  let fixture: ComponentFixture<TableSelectionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableSelectionExampleComponent ]
+      declarations: [TableSelectionComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TableSelectionExampleComponent);
+    fixture = TestBed.createComponent(TableSelectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

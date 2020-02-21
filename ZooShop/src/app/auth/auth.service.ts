@@ -72,6 +72,8 @@ export class AuthService {
     this.authChange.next(false);
     this.router.navigate(['/login']);
     this.isAuthenticated = false;
+
+    localStorage.removeItem('gui');
   }
 
   private authSuccessfully() {
