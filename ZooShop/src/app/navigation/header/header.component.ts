@@ -14,7 +14,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authSubscription: Subscription;
 
   get username() {
-    return this.profileService?.profile?.email;
+    // return this.profileService?.profile?.email;
+    return localStorage.getItem('email');
   }
 
   constructor(
@@ -34,6 +35,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.authChange.subscribe(authStatus => {
       this.isAuth = authStatus;
     });
+    this.authService.successfullLogin$.subscribe(() => {
+
+    })
   }
   ngOnDestroy(): void {
     this.authSubscription.unsubscribe();

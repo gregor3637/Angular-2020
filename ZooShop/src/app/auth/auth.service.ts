@@ -10,10 +10,12 @@ import { ProfileService } from '../profile/profile.service';
 @Injectable()
 export class AuthService {
   authChange = new Subject<boolean>();
+  successfullLogin$ = new Subject();
   userEmailData$ = new Subject<string>();
   newUser$ = new Subject<string>();
   private isAuthenticated = false;
   _email: string;
+
 
   get email() {
     return this._email || 'unknown';
@@ -73,13 +75,14 @@ export class AuthService {
     this.router.navigate(['/login']);
     this.isAuthenticated = false;
 
-    localStorage.removeItem('gui');
+    localStorage.removeItem('email');
   }
 
   private authSuccessfully() {
     this.isAuthenticated = true;
     this.authChange.next(true);
     this.router.navigate(['/profile']);
+    this.successfullLogin$.next();
   }
 
   isAuth() {

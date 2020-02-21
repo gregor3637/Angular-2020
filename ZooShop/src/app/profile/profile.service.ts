@@ -36,7 +36,7 @@ export class ProfileService {
       .set(freshProfile)
       .then(result => {
         this.profile = freshProfile;
-        localStorage.setItem('gui', JSON.stringify(gui))
+        localStorage.setItem('email', JSON.stringify(this.profile.email))
         this.newProfileCreated$.next(true);
       })
       .catch(error => {
@@ -45,7 +45,6 @@ export class ProfileService {
   }
 
   fetchUserData(gui: string) {
-    localStorage.setItem('gui', JSON.stringify(gui))
 
     this.db
       .collection('ShopUsers')
@@ -54,6 +53,7 @@ export class ProfileService {
       .subscribe((newProfileData) => {
         this.profile = newProfileData as unknown as Profile;
         this.profileChanged$.next(this.profile);
+        localStorage.setItem('email', JSON.stringify(this.profile.email));
 
         console.log('hope this works start');
         console.log(this.profile);
