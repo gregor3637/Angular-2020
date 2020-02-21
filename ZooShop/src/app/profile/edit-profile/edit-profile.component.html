@@ -32,6 +32,9 @@
                   </mat-form-field>
 
 
+                  <input type="file" (change)="onFileSelected($event)">
+                  <button type="button" (click)="onUpload()"> Upload</button>
+
 
                 <div fxLayout="row"  fxLayoutAlign="space-evenly" >
                     <button 

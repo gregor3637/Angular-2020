@@ -20,6 +20,7 @@ import { PetsModule } from './pets/pets.module';
 import { ShopModule } from './shop/shop.module';
 import { PetsService } from './pets/pets.service';
 import { ProfileService } from './profile/profile.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ProfileService } from './profile/profile.service';
     SidenavListComponent,
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

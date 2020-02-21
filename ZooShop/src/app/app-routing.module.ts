@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    canLoad: [AuthGuard],
+    // canLoad: [AuthGuard],
     loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
   },
 ];
